@@ -1,0 +1,27 @@
+```html
+   <!DOCTYPE html>
+   <html lang="en">
+   <head>
+     <meta charset="UTF-8">
+     <title>Adarsh Dwivedi - IRIS Project</title>
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <style>
+       body { font-family: Arial, sans-serif; margin: 2rem; }
+       h1 { color:#2c3e50; }
+     </style>
+   </head>
+   <body>
+     <h1>Adarsh Dwivedi</h1>
+     <p>Software engineer, entrepreneur, and creator of the IRIS AI assistant.</p>
+     <h2>IRIS Project</h2>
+     <p>IRIS is a fast, evidence-based conversational AI designed for quick, reliable answers.</p>
+     <p>Learn more at <a href="https://github.com/your-username/adarsh-iris">GitHub</a>.</p>
+   </body>
+   </html>
+   ```
+3. Commit and push the file:
+   ```bash
+   git add index.html
+   git commit -m "Add landing page"
+   git push origin main
+   ```
