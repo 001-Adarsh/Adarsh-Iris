@@ -1,19 +1,423 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Adarsh Dwivedi - IRIS Project</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IRIS — Autonomous Software Engineering Agent</title>
+  <meta name="description" content="Official technical overview of IRIS (Intelligent Routing & Iterative Synthesis), an autonomous recursive software engineering agent." />
   <style>
-    body { font-family: Arial, sans-serif; margin: 2rem; }
-    h1 { color: #2c3e50; }
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-secondary: #21262d;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --accent-rgb: 88, 166, 255;
+      --text: #c9d1d9;
+      --text-bright: #ffffff;
+      --text-muted: #8b949e;
+      --code-bg: #090d13;
+      --success: #3fb950;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background-color: var(--bg);
+      padding: 2.5rem 1rem;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background-color: rgba(var(--accent-rgb), 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(var(--accent-rgb), 0.3);
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      color: var(--text-bright);
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+    }
+
+    .subtitle {
+      font-size: 1.15rem;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 1.25rem;
+    }
+
+    .lead {
+      font-size: 1.05rem;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: var(--text-bright);
+      margin-top: 2.5rem;
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    p {
+      margin-bottom: 1rem;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      margin: 1.5rem 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background-color: var(--surface);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.92rem;
+    }
+
+    th, td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    th {
+      background-color: var(--surface-secondary);
+      color: var(--text-bright);
+      font-weight: 600;
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin: 1.5rem 0;
+    }
+
+    @media (min-width: 768px) {
+      .grid-two {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .card {
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.25rem;
+    }
+
+    .card h3 {
+      font-size: 1.1rem;
+      color: var(--text-bright);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card code {
+      font-size: 0.85rem;
+      color: var(--accent);
+      background-color: var(--code-bg);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+    }
+
+    ol, ul {
+      margin-left: 1.4rem;
+      margin-bottom: 1rem;
+    }
+
+    li {
+      margin-bottom: 0.4rem;
+    }
+
+    code {
+      background-color: var(--code-bg);
+      color: #79c0ff;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.88em;
+      border: 1px solid var(--border);
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    }
+
+    .milestone-item {
+      background-color: var(--surface);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+      border-top: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .milestone-item strong {
+      color: var(--text-bright);
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+
+    .profile-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      background-color: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      margin-top: 3.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
   </style>
 </head>
 <body>
-  <h1>Adarsh Dwivedi</h1>
-  <p>Software engineer, entrepreneur, and creator of the IRIS AI assistant.</p>
-  <h2>IRIS Project</h2>
-  <p>IRIS is a fast, evidence-based conversational AI designed for quick, reliable answers.</p>
-  <p>Learn more at <a href="https://github.com/001-Adarsh/Adarsh-Iris">GitHub</a>.</p>
+  <div class="container">
+    <header>
+      <span class="badge">Architecture Specification</span>
+      <h1>IRIS</h1>
+      <p class="subtitle">Intelligent Routing &amp; Iterative Synthesis</p>
+      <p class="lead">
+        IRIS is an autonomous, hybrid-architecture software engineering agent and recursive artificial intelligence system designed and developed by Indian AI researcher <strong><a href="https://www.linkedin.com/in/adarsh-dwivedi000/" target="_blank" rel="noopener noreferrer">Adarsh Dwivedi</a></strong>.
+      </p>
+      <p>
+        The system architecture integrates ultra-low-latency cloud Language Processing Units (LPUs) with local specialized inference engines to execute native operating system automation, distributed multi-model deliberation, and self-directed code modification.
+      </p>
+      <p>
+        Unlike conventional conversational wrappers and static large language models that remain constrained to generating static code snippets, IRIS features an autonomous closed-loop software lifecycle engine. It diagnoses internal system bottlenecks, formulates targeted Abstract Syntax Tree (AST) patches, tests changes within a virtualized sandbox runtime, and verifies production readiness without external tooling or human programming intervention.
+      </p>
+    </header>
+
+    <main>
+      <!-- Section 1 -->
+      <section>
+        <h2>1. Core Differentiation: Autonomous Self-Evolution vs. Static LLMs</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Architectural Feature</th>
+                <th>Conventional Conversational Models (e.g., ChatGPT)</th>
+                <th>IRIS Autonomous System</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Operational Boundary</strong></td>
+                <td>Context window sandbox; cannot alter runtime source files</td>
+                <td>Dynamic source inspection; directly modifies local core Python modules</td>
+              </tr>
+              <tr>
+                <td><strong>Code Execution</strong></td>
+                <td>Ephemeral, stateless code execution or display-only markdown</td>
+                <td>Integrated OS runtime interfacing with PowerShell, Python, and disk I/O</td>
+              </tr>
+              <tr>
+                <td><strong>System Modification</strong></td>
+                <td>Static model weights; cannot optimize underlying execution logic</td>
+                <td>Autonomous code mutation via sandboxed cloning, unit testing, and hot deployment</td>
+              </tr>
+              <tr>
+                <td><strong>Decision Authority</strong></td>
+                <td>Single provider/model inference pipeline</td>
+                <td>Multi-model AI Council with competitive consensus deadlines</td>
+              </tr>
+              <tr>
+                <td><strong>Failure Recovery</strong></td>
+                <td>Hallucinates or terminates execution upon internal code errors</td>
+                <td>Self-detects latency spikes/errors and generates isolated patch proposals</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 2 -->
+      <section>
+        <h2>2. Architecture and Autonomous Mechanics</h2>
+        <p>IRIS is structured around a modular micro-engine design implemented in Python, separated into isolated functional subsystems:</p>
+
+        <div class="grid-two">
+          <div class="card">
+            <h3>Development Engine</h3>
+            <code>core/development_workflow.py</code>
+            <p style="margin-top: 0.6rem;">When latency spikes, runtime bottlenecks, or missing capabilities are detected, the self-development pipeline executes autonomously:</p>
+            <ol>
+              <li><strong>Codebase Mapping:</strong> Recursively parses project ASTs to isolate structural bottlenecks.</li>
+              <li><strong>Deterministic Plan:</strong> Constructs unified patch definitions under rigid JSON schemas.</li>
+              <li><strong>AST Validation:</strong> Compiles modules via AST parsers and <code>py_compile</code> before sandbox execution.</li>
+            </ol>
+          </div>
+
+          <div class="card">
+            <h3>Execution Sandbox</h3>
+            <code>core/sandbox.py</code>
+            <p style="margin-top: 0.6rem;">To maintain complete runtime safety and prevent regressions during self-modification:</p>
+            <ul>
+              <li>Clones live repository state into an isolated workspace (<code>sandbox/autonomous_development_*</code>).</li>
+              <li>Applies file mutations strictly within the containerized boundary.</li>
+              <li>Runs <code>IRISTestRunner</code> suites; if verification fails, the sandbox is dropped with zero host impact.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>Upgrade Manager</h3>
+            <code>core/upgrade_manager.py</code>
+            <p style="margin-top: 0.6rem;">Upon test clearance, compiles a validated upgrade manifest (<code>upgrade_proposals/proposal_*.json</code>):</p>
+            <ul>
+              <li>Computes SHA-256 checksums across target files.</li>
+              <li>Maintains structured change logs and test audit artifacts.</li>
+              <li>Submits proposed mutations to an internal Approval Gate (<code>core/approval_gate.py</code>) prior to live merging.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>AI Council Consensus Engine</h3>
+            <code>core/router.py</code>
+            <p style="margin-top: 0.6rem;">Eliminates reliance on a single provider by coordinating heterogeneous inference engines:</p>
+            <ul>
+              <li>Concurrently queries cloud LPUs (Groq), Gemini, and private on-device local models.</li>
+              <li>Enforces sub-second competitive consensus deadlines.</li>
+              <li>Streams high-frequency interaction via low-latency LPUs while routing deep refactoring to analytical nodes.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3 -->
+      <section>
+        <h2>3. Native Automation Registry</h2>
+        <p>Controlled, audited interfaces allowing the runtime to interact safely with the host operating system and network layers:</p>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Module / Tool</th>
+                <th>Execution Mode</th>
+                <th>Functional Capabilities</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>run_powershell</code> / <code>run_python</code></td>
+                <td>Sandboxed / Host OS</td>
+                <td>Terminal command execution, process introspection, shell scripting</td>
+              </tr>
+              <tr>
+                <td><code>search_web</code> / <code>web_reader</code></td>
+                <td>Headless Network</td>
+                <td>Live multi-source web querying, evidence extraction, document scraping</td>
+              </tr>
+              <tr>
+                <td><code>file_tool</code> / <code>document_tool</code></td>
+                <td>File System Engine</td>
+                <td>AST-level file creation, batch replacement, .docx compilation</td>
+              </tr>
+              <tr>
+                <td><code>excel_tool</code></td>
+                <td>Tabular Compiler</td>
+                <td>Spreadsheet creation, dataset generation, computational audits</td>
+              </tr>
+              <tr>
+                <td><code>memory.py</code></td>
+                <td>Persistent Vector / Disk</td>
+                <td>Multi-session episodic recall and developer preference indexing</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Section 4 -->
+      <section>
+        <h2>4. Key Engineering Milestones</h2>
+        
+        <div class="milestone-item">
+          <strong>Closed-Loop Self-Repair Verification</strong>
+          Validated end-to-end autonomous optimization where the engine detected latency degradation, formulated code patches, performed isolated sandbox regression tests, and merged upgrades upon verification.
+        </div>
+
+        <div class="milestone-item">
+          <strong>Resilient Protocol Matching</strong>
+          Implemented punctuation-safe token normalization and multi-tier semantic gating to prevent cross-talk between rapid conversational streams and deep codebase mutations.
+        </div>
+
+        <div class="milestone-item">
+          <strong>Distributed Multi-Engine Deliberation</strong>
+          Achieved sub-second consensus synthesis routing tasks between remote cloud LPUs and on-device execution engines.
+        </div>
+      </section>
+
+      <!-- Section 5 -->
+      <section>
+        <h2>5. Project Credits &amp; Links</h2>
+        <div class="profile-card">
+          <p><strong>Lead Architect:</strong> Adarsh Dwivedi</p>
+          <p><strong>Professional Profile:</strong> <a href="https://www.linkedin.com/in/adarsh-dwivedi000/" target="_blank" rel="noopener noreferrer">linkedin.com/in/adarsh-dwivedi000</a></p>
+          <p><strong>Source Repository:</strong> <a href="https://github.com/001-Adarsh/Adarsh-Iris" target="_blank" rel="noopener noreferrer">github.com/001-Adarsh/Adarsh-Iris</a></p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; IRIS Project &bull; Intelligent Routing &amp; Iterative Synthesis</p>
+    </footer>
+  </div>
 </body>
 </html>
